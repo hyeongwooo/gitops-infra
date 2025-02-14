@@ -1,0 +1,17 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: argocd-policy
+  namespace: argocd
+spec:
+  resourceSelectors:
+    - apiVersion: v1
+      kind: Namespace
+    - apiVersion: apps/v1
+      kind: Deployment
+    - apiVersion: v1
+      kind: Service
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
