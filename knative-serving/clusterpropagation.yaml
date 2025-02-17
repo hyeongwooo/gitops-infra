@@ -17,14 +17,33 @@ spec:
     - apiVersion: apiextensions.k8s.io/v1
       kind: CustomResourceDefinition
       name: configurations.serving.knative.dev
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: images.caching.internal.knative.dev
 
-    # Knative Serving Cluster Roles
+    # Knative Serving Cluster Roles (추가된 Role 포함)
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       name: knative-serving-admin
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       name: knative-serving-binding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: knative-serving-controller
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: knative-serving-controller-binding
+
+    # Knative Istio Gateway 역할 추가
+    - apiVersion: networking.istio.io/v1alpha3
+      kind: Gateway
+      name: knative-ingress-gateway
+      namespace: istio-system
+    - apiVersion: networking.istio.io/v1alpha3
+      kind: VirtualService
+      name: knative-route
+      namespace: istio-system
 
   placement:
     clusterAffinity:
