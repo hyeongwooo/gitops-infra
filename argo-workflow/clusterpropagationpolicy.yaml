@@ -1,132 +1,57 @@
 apiVersion: policy.karmada.io/v1alpha1
-kind: PropagationPolicy
+kind: ClusterPropagationPolicy
 metadata:
- name: argo-workflows-resources
- namespace: argo
+  name: argo-workflows-cluster-resources
 spec:
- resourceSelectors:
-   # Namespace-level ServiceAccounts
-   - apiVersion: v1
-     kind: ServiceAccount
-     name: argo
-     namespace: argo
-   - apiVersion: v1
-     kind: ServiceAccount
-     name: argo-server
-     namespace: argo
-   - apiVersion: v1
-     kind: ServiceAccount
-     name: github.com
-     namespace: argo
-   
-   # ConfigMaps
-   - apiVersion: v1
-     kind: ConfigMap
-     name: workflow-controller-configmap
-     namespace: argo
-   - apiVersion: v1
-     kind: ConfigMap
-     name: artifact-repositories
-     namespace: argo
+  resourceSelectors:
+    # CRDs
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: clusterworkflowtemplates.argoproj.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: cronworkflows.argoproj.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: workflowartifactgctasks.argoproj.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: workfloweventbindings.argoproj.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: workflows.argoproj.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: workflowtasksets.argoproj.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: workflowtemplates.argoproj.io
 
-   # Secrets
-   - apiVersion: v1
-     kind: Secret
-     name: argo-server-sso
-     namespace: argo
-   - apiVersion: v1
-     kind: Secret
-     name: argo-workflows-webhook-clients
-     namespace: argo
-   - apiVersion: v1
-     kind: Secret
-     name: my-minio-cred
-     namespace: argo
-   - apiVersion: v1
-     kind: Secret
-     name: default.service-account-token
-     namespace: argo
-   - apiVersion: v1
-     kind: Secret
-     name: github.com.service-account-token
-     namespace: argo
-   - apiVersion: v1
-     kind: Secret
-     name: argo-token
-     namespace: argo
-     annotations:
-       kubernetes.io/service-account.name: argo
-   
-   # Services
-   - apiVersion: v1
-     kind: Service
-     name: argo-server
-     namespace: argo
-   - apiVersion: v1
-     kind: Service
-     name: minio
-     namespace: argo
-   - apiVersion: v1
-     kind: Service
-     name: httpbin
-     namespace: argo
+    # Cluster-level RBAC
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-cluster-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-server-cluster-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-aggregate-to-admin
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-aggregate-to-edit
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-aggregate-to-view
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-binding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-server-binding
 
-   # Namespace-level RBAC
-   - apiVersion: rbac.authorization.k8s.io/v1
-     kind: Role
-     name: argo-role
-     namespace: argo
-   - apiVersion: rbac.authorization.k8s.io/v1
-     kind: RoleBinding
-     name: argo-binding
-     namespace: argo
-   
-   # Priority Class
-   - apiVersion: scheduling.k8s.io/v1
-     kind: PriorityClass
-     name: workflow-controller
-
-   # Cluster-level RBAC
-   - apiVersion: rbac.authorization.k8s.io/v1
-     kind: ClusterRole
-     name: argo-cluster-role
-   - apiVersion: rbac.authorization.k8s.io/v1
-     kind: ClusterRoleBinding
-     name: argo-binding
-   - apiVersion: rbac.authorization.k8s.io/v1
-     kind: ClusterRole
-     name: argo-clusterworkflowtemplate-role
-   - apiVersion: rbac.authorization.k8s.io/v1
-     kind: ClusterRoleBinding
-     name: argo-clusterworkflowtemplate-role-binding
-
-   # Deployments
-   - apiVersion: apps/v1
-     kind: Deployment
-     name: workflow-controller
-     namespace: argo
-     labelSelector:
-       matchLabels: 
-         app: workflow-controller
-   - apiVersion: apps/v1
-     kind: Deployment
-     name: argo-server
-     namespace: argo
-   - apiVersion: apps/v1
-     kind: Deployment
-     name: minio
-     namespace: argo
-   - apiVersion: apps/v1
-     kind: Deployment
-     name: httpbin
-     namespace: argo
-
- placement:
-   clusterAffinity:
-     clusterNames:
-       - member1
-   spreadConstraints:
-     - maxGroups: 1
-       minGroups: 1
-       spreadByField: cluster
- propagationMode: BidirectionalSync
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+  propagationMode: BidirectionalSync
