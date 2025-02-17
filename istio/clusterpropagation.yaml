@@ -1,7 +1,7 @@
 apiVersion: policy.karmada.io/v1alpha1
-kind: PropagationPolicy
+kind: ClusterPropagationPolicy
 metadata:
-  name: knative-istio-resources
+  name: knative-istio-cluster-resources
   namespace: knative-serving
 spec:
   resourceSelectors:
