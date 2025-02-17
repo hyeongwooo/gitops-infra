@@ -58,5 +58,3 @@ spec:
     clusterAffinity:
       clusterNames:
         - member1
-  dependentOverrides:
-    - argocd-crds-policy
