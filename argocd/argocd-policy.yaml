@@ -7,10 +7,17 @@ spec:
   resourceSelectors:
     - apiVersion: v1
       kind: Namespace
+      name: argocd           # 구체적인 namespace 지정
     - apiVersion: apps/v1
       kind: Deployment
+      namespace: argocd      # namespace 지정
     - apiVersion: v1
       kind: Service
+      namespace: argocd      # namespace 지정
+    - apiVersion: apiextensions.k8s.io/v1  # CRD도 포함
+      kind: CustomResourceDefinition
+    - apiVersion: argoproj.io/v1alpha1     # Argo 리소스도 포함
+      kind: Application
   placement:
     clusterAffinity:
       clusterNames:
