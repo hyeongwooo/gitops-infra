@@ -22,18 +22,27 @@ spec:
       name: workflowartifactgctasks.argoproj.io
 
     # Cluster RBAC
+    # Cluster Role 추가 (workflow-controller가 필요한 모든 권한 포함)
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       name: argo-cluster-role
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
+      name: argo-workflow-controller-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
       name: argo-clusterworkflowtemplate-role
+    
+    # Cluster Role Binding 추가 (argo ServiceAccount와 연결)
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       name: argo-binding
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       name: argo-clusterworkflowtemplate-role-binding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-workflow-controller-binding
 
     # Priority Class
     - apiVersion: scheduling.k8s.io/v1
