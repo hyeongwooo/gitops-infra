@@ -58,4 +58,4 @@ spec:
     clusterAffinity:
       clusterNames:
         - member1
-  priority: 0
+  priority: 1
