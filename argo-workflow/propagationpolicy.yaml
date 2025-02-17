@@ -62,7 +62,7 @@ spec:
       name: workflow-webhook
       namespace: argo
 
-    # Workflow Resources
+    # Workflow Resources (ClusterWorkflowTemplate은 ClusterScoped 리소스이므로 namespace 제거)
     - apiVersion: argoproj.io/v1alpha1
       kind: ClusterWorkflowTemplate
       name: example-cluster-template
