@@ -1,20 +1,38 @@
 apiVersion: policy.karmada.io/v1alpha1
 kind: PropagationPolicy
 metadata:
-  name: knative-istio-resources
-  namespace: knative-serving
+  name: istio-resources
+  namespace: istio-system
 spec:
   resourceSelectors:
-    # Istio Namespace & Gateway
+    # Istio Core Components
     - apiVersion: v1
       kind: Namespace
       name: istio-system
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: istiod
+      namespace: istio-system
+    - apiVersion: v1
+      kind: Service
+      name: istiod
+      namespace: istio-system
+
+    # Istio Ingress Gateway
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: istio-ingressgateway
+      namespace: istio-system
+    - apiVersion: v1
+      kind: Service
+      name: istio-ingressgateway
+      namespace: istio-system
+
+    # Istio Gateway & VirtualService for Knative
     - apiVersion: networking.istio.io/v1alpha3
       kind: Gateway
       name: knative-ingress-gateway
       namespace: istio-system
-
-    # Istio VirtualService
     - apiVersion: networking.istio.io/v1alpha3
       kind: VirtualService
       name: knative-route
