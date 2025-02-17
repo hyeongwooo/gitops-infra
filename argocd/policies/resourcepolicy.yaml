@@ -44,6 +44,16 @@ spec:
     - apiVersion: networking.k8s.io/v1
       kind: NetworkPolicy
       namespace: argocd
+    # Custom Resources
+    - apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      namespace: argocd
+    - apiVersion: argoproj.io/v1alpha1
+      kind: AppProject
+      namespace: argocd
+    - apiVersion: argoproj.io/v1alpha1
+      kind: ApplicationSet
+      namespace: argocd
   placement:
     clusterAffinity:
       clusterNames:
