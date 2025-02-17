@@ -5,7 +5,7 @@ metadata:
   namespace: argo
 spec:
   resourceSelectors:
-    # ServiceAccounts
+    # ServiceAccounts (유지)
     - apiVersion: v1
       kind: ServiceAccount
       name: argo
@@ -19,7 +19,7 @@ spec:
       name: github.com
       namespace: argo
     
-    # ConfigMaps
+    # ConfigMaps (유지)
     - apiVersion: v1
       kind: ConfigMap
       name: workflow-controller-configmap
@@ -29,7 +29,7 @@ spec:
       name: artifact-repositories
       namespace: argo
 
-    # Secrets
+    # Secrets (유지)
     - apiVersion: v1
       kind: Secret
       name: argo-server-sso
@@ -43,7 +43,7 @@ spec:
       name: my-minio-cred
       namespace: argo
 
-    # Services
+    # Services (유지)
     - apiVersion: v1
       kind: Service
       name: argo-server
@@ -57,15 +57,65 @@ spec:
       name: httpbin
       namespace: argo
 
-    # RBAC
+    # RBAC (수정)
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role
+      name: argo-role
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: agent
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: artifactgc
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: executor
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: pod-manager
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: submit-workflow-template
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: workflow-manager
       namespace: argo
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
+      name: argo-binding
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: agent-default
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: artifactgc-default
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: executor-default
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: github.com
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: pod-manager-default
+      namespace: argo
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: workflow-manager-default
       namespace: argo
 
-    # Deployments
+    # Deployments (유지)
     - apiVersion: apps/v1
       kind: Deployment
       name: workflow-controller
