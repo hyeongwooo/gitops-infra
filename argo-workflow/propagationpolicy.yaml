@@ -38,15 +38,15 @@ spec:
     - apiVersion: apps/v1
       kind: Deployment
       name: workflow-controller
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: apps/v1
       kind: Deployment
       name: argo-server
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: apps/v1
       kind: Deployment
       name: workflow-webhook
-      namespace: argo-workflows
+      namespace: argo
 
     # Services (웹 UI 및 컨트롤러 서비스)
     - apiVersion: v1
