@@ -7,11 +7,12 @@ rules:
   - ""
   resources:
   - configmaps
+  resourceNames:
+  - extension-apiserver-authentication
   verbs:
   - get
   - list
   - watch
-  namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
