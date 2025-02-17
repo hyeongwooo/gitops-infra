@@ -1,21 +1,21 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: cert-manager-webhook-secret-reader
+  name: cert-manager-cainjector-leases
 rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "list", "watch"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cert-manager-webhook-secret-reader-binding
+  name: cert-manager-cainjector-leases-binding
 subjects:
   - kind: ServiceAccount
-    name: cert-manager-webhook
+    name: cert-manager-cainjector
     namespace: cert-manager
 roleRef:
   kind: ClusterRole
-  name: cert-manager-webhook-secret-reader
+  name: cert-manager-cainjector-leases
   apiGroup: rbac.authorization.k8s.io
