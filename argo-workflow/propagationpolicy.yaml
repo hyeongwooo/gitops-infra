@@ -5,36 +5,67 @@ metadata:
   namespace: argo
 spec:
   resourceSelectors:
-    # Namespace (먼저 배포되어야 함)
-    - apiVersion: v1
-      kind: Namespace
-      name: argo
-
-    # Core Resources (Namespace 범위 리소스)
+    # ServiceAccounts
     - apiVersion: v1
       kind: ServiceAccount
-      name: argo-workflows-sa
+      name: argo
       namespace: argo
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: argo-server
+      namespace: argo
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: github.com
+      namespace: argo
+    
+    # ConfigMaps
     - apiVersion: v1
       kind: ConfigMap
       name: workflow-controller-configmap
       namespace: argo
     - apiVersion: v1
-      kind: Secret
-      name: webhook-tls-secret
+      kind: ConfigMap
+      name: artifact-repositories
       namespace: argo
 
-    # RBAC (Namespace 범위 Role 및 RoleBinding)
+    # Secrets
+    - apiVersion: v1
+      kind: Secret
+      name: argo-server-sso
+      namespace: argo
+    - apiVersion: v1
+      kind: Secret
+      name: argo-workflows-webhook-clients
+      namespace: argo
+    - apiVersion: v1
+      kind: Secret
+      name: my-minio-cred
+      namespace: argo
+
+    # Services
+    - apiVersion: v1
+      kind: Service
+      name: argo-server
+      namespace: argo
+    - apiVersion: v1
+      kind: Service
+      name: minio
+      namespace: argo
+    - apiVersion: v1
+      kind: Service
+      name: httpbin
+      namespace: argo
+
+    # RBAC
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role
-      name: argo-workflows-role
       namespace: argo
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
-      name: argo-workflows-role-binding
       namespace: argo
 
-    # Deployments (Argo Workflows 컨트롤러 및 Webhook)
+    # Deployments
     - apiVersion: apps/v1
       kind: Deployment
       name: workflow-controller
@@ -45,35 +76,11 @@ spec:
       namespace: argo
     - apiVersion: apps/v1
       kind: Deployment
-      name: workflow-webhook
+      name: minio
       namespace: argo
-
-    # Services (웹 UI 및 컨트롤러 서비스)
-    - apiVersion: v1
-      kind: Service
-      name: argo-server
-      namespace: argo
-    - apiVersion: v1
-      kind: Service
-      name: workflow-controller-metrics
-      namespace: argo
-    - apiVersion: v1
-      kind: Service
-      name: workflow-webhook
-      namespace: argo
-
-    # Workflow Resources (ClusterWorkflowTemplate은 ClusterScoped 리소스이므로 namespace 제거)
-    - apiVersion: argoproj.io/v1alpha1
-      kind: ClusterWorkflowTemplate
-      name: example-cluster-template
-      namespace: argo
-    - apiVersion: argoproj.io/v1alpha1
-      kind: CronWorkflow
-      name: example-cronworkflow
-      namespace: argo
-    - apiVersion: argoproj.io/v1alpha1
-      kind: WorkflowEventBinding
-      name: example-workflow-event-binding
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: httpbin
       namespace: argo
 
   placement:
