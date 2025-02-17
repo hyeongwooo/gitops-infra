@@ -1,0 +1,52 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: ClusterPropagationPolicy
+metadata:
+  name: knative-istio-cluster-resources
+spec:
+  resourceSelectors:
+    # Knative Serving CRDs (클러스터 전체에서 필요)
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: configurations.serving.knative.dev
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: revisions.serving.knative.dev
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: routes.serving.knative.dev
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: services.serving.knative.dev
+
+    # Istio CRDs (클러스터 전체에서 필요)
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: gateways.networking.istio.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: virtualservices.networking.istio.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: destinationrules.networking.istio.io
+
+    # Knative Serving ClusterRole & Binding (클러스터 전체에서 필요)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: knative-serving-admin
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: knative-serving-admin-binding
+
+    # Istio ClusterRole & Binding (클러스터 전체에서 필요)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: istio-admin
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: istio-admin-binding
+
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+  propagationMode: BidirectionalSync
