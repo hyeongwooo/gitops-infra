@@ -1,0 +1,68 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: knative-istio-resources
+  namespace: knative-serving
+spec:
+  resourceSelectors:
+    # Knative Serving Namespace & ServiceAccount
+    - apiVersion: v1
+      kind: Namespace
+      name: knative-serving
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: controller
+      namespace: knative-serving
+
+    # Knative Serving ConfigMap
+    - apiVersion: v1
+      kind: ConfigMap
+      name: config-network
+      namespace: knative-serving
+    - apiVersion: v1
+      kind: ConfigMap
+      name: config-domain
+      namespace: knative-serving
+
+    # Knative Serving Controller & Autoscaler
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: activator
+      namespace: knative-serving
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: autoscaler
+      namespace: knative-serving
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: controller
+      namespace: knative-serving
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: webhook
+      namespace: knative-serving
+
+    # Istio Namespace & Gateway
+    - apiVersion: v1
+      kind: Namespace
+      name: istio-system
+    - apiVersion: networking.istio.io/v1alpha3
+      kind: Gateway
+      name: knative-ingress-gateway
+      namespace: istio-system
+
+    # Istio VirtualService
+    - apiVersion: networking.istio.io/v1alpha3
+      kind: VirtualService
+      name: knative-route
+      namespace: istio-system
+
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+    spreadConstraints:
+      - maxGroups: 1
+        minGroups: 1
+        spreadByField: cluster
+  propagationMode: BidirectionalSync
