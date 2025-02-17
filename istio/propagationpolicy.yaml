@@ -5,7 +5,7 @@ metadata:
   namespace: knative-serving
 spec:
   resourceSelectors:
-      # Istio Namespace & Gateway
+    # Istio Namespace & Gateway
     - apiVersion: v1
       kind: Namespace
       name: istio-system
@@ -19,7 +19,8 @@ spec:
       kind: VirtualService
       name: knative-route
       namespace: istio-system
-   placement:
+
+  placement:
     clusterAffinity:
       clusterNames:
         - member1
