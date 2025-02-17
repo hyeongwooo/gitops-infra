@@ -77,6 +77,28 @@ spec:
       kind: Deployment
       name: workflow-controller
       namespace: argo
+      labelSelector:
+        matchLabels: 
+          app: workflow-controller
+    # 추가: default.service-account-token Secret
+    - apiVersion: v1
+      kind: Secret
+      name: default.service-account-token
+      namespace: argo
+
+    # 추가: github.com.service-account-token Secret
+    - apiVersion: v1
+      kind: Secret
+      name: github.com.service-account-token
+      namespace: argo
+
+    # Workflow Controller를 위한 추가 RBAC
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-clusterworkflowtemplate-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-clusterworkflowtemplate-role-binding
     - apiVersion: apps/v1
       kind: Deployment
       name: argo-server
