@@ -1,0 +1,81 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: cert-manager-resources
+  namespace: cert-manager
+spec:
+  resourceSelectors:
+    # cert-manager Namespace
+    - apiVersion: v1
+      kind: Namespace
+      name: cert-manager
+
+    # ServiceAccounts
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: cert-manager
+      namespace: cert-manager
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: cert-manager-cainjector
+      namespace: cert-manager
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: cert-manager-webhook
+      namespace: cert-manager
+
+    # ConfigMaps
+    - apiVersion: v1
+      kind: ConfigMap
+      name: cert-manager-controller
+      namespace: cert-manager
+
+    # Secrets (웹훅 관련)
+    - apiVersion: v1
+      kind: Secret
+      name: cert-manager-webhook-tls
+      namespace: cert-manager
+
+    # Deployments
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: cert-manager
+      namespace: cert-manager
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: cert-manager-cainjector
+      namespace: cert-manager
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: cert-manager-webhook
+      namespace: cert-manager
+
+    # Services
+    - apiVersion: v1
+      kind: Service
+      name: cert-manager
+      namespace: cert-manager
+    - apiVersion: v1
+      kind: Service
+      name: cert-manager-webhook
+      namespace: cert-manager
+
+    # Role & RoleBinding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: cert-manager-leaderelection
+      namespace: cert-manager
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: cert-manager-leaderelection
+      namespace: cert-manager
+
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+    spreadConstraints:
+      - maxGroups: 1
+        minGroups: 1
+        spreadByField: cluster
+  propagationMode: BidirectionalSync
