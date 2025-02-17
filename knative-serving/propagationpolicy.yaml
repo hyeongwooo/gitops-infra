@@ -42,21 +42,6 @@ spec:
       name: webhook
       namespace: knative-serving
 
-    # Istio Namespace & Gateway
-    - apiVersion: v1
-      kind: Namespace
-      name: istio-system
-    - apiVersion: networking.istio.io/v1alpha3
-      kind: Gateway
-      name: knative-ingress-gateway
-      namespace: istio-system
-
-    # Istio VirtualService
-    - apiVersion: networking.istio.io/v1alpha3
-      kind: VirtualService
-      name: knative-route
-      namespace: istio-system
-
   placement:
     clusterAffinity:
       clusterNames:
