@@ -81,6 +81,9 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       name: kube-system-configmap-reader
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: kube-system-configmap-reader-binding
   placement:
     clusterAffinity:
       clusterNames:
