@@ -58,5 +58,8 @@ spec:
     clusterAffinity:
       clusterNames:
         - member1
-  dependentOverrides:
-    - argocd-crds-policy
+   spreadConstraints:  # 추가
+      - maxGroups: 1
+        minGroups: 1
+        spreadByField: cluster
+  propagationMode: BidirectionalSync  # 추가
