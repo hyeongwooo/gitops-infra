@@ -11,4 +11,4 @@ spec:
     clusterAffinity:
       clusterNames:
         - member1
-  priority: 1
+  priority: 100
