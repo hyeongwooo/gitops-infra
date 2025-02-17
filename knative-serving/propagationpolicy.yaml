@@ -1,11 +1,11 @@
 apiVersion: policy.karmada.io/v1alpha1
 kind: PropagationPolicy
 metadata:
-  name: knative-istio-resources
+  name: knative-serving-resources
   namespace: knative-serving
 spec:
   resourceSelectors:
-    # Knative Serving Namespace & ServiceAccount
+    # Knative Serving Core Components
     - apiVersion: v1
       kind: Namespace
       name: knative-serving
@@ -13,18 +13,20 @@ spec:
       kind: ServiceAccount
       name: controller
       namespace: knative-serving
-
-    # Knative Serving ConfigMap
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: autoscaler
+      namespace: knative-serving
+    - apiVersion: v1
+      kind: ConfigMap
+      name: config-autoscaler
+      namespace: knative-serving
     - apiVersion: v1
       kind: ConfigMap
       name: config-network
       namespace: knative-serving
-    - apiVersion: v1
-      kind: ConfigMap
-      name: config-domain
-      namespace: knative-serving
 
-    # Knative Serving Controller & Autoscaler
+    # Knative Serving Deployments
     - apiVersion: apps/v1
       kind: Deployment
       name: activator
@@ -39,6 +41,16 @@ spec:
       namespace: knative-serving
     - apiVersion: apps/v1
       kind: Deployment
+      name: webhook
+      namespace: knative-serving
+
+    # Knative Serving Services
+    - apiVersion: v1
+      kind: Service
+      name: activator-service
+      namespace: knative-serving
+    - apiVersion: v1
+      kind: Service
       name: webhook
       namespace: knative-serving
 
