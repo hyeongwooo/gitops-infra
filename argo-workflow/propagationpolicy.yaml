@@ -5,7 +5,12 @@ metadata:
   namespace: argo
 spec:
   resourceSelectors:
-    # Namespace-level ServiceAccounts
+    # Namespace
+    - apiVersion: v1
+      kind: Namespace
+      name: argo
+      
+    # ServiceAccounts
     - apiVersion: v1
       kind: ServiceAccount
       name: argo
@@ -13,6 +18,10 @@ spec:
     - apiVersion: v1
       kind: ServiceAccount
       name: argo-server
+      namespace: argo
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: github.com
       namespace: argo
     
     # ConfigMaps
@@ -38,6 +47,18 @@ spec:
       kind: Secret
       name: my-minio-cred
       namespace: argo
+    - apiVersion: v1
+      kind: Secret
+      name: argo-token
+      namespace: argo
+    - apiVersion: v1
+      kind: Secret
+      name: default.service-account-token
+      namespace: argo
+    - apiVersion: v1
+      kind: Secret
+      name: github.com.service-account-token
+      namespace: argo
 
     # Services
     - apiVersion: v1
@@ -53,7 +74,7 @@ spec:
       name: httpbin
       namespace: argo
 
-    # Namespace-level RBAC
+    # Namespace RBAC
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role
       name: argo-role
@@ -85,8 +106,4 @@ spec:
     clusterAffinity:
       clusterNames:
         - member1
-    spreadConstraints:
-      - maxGroups: 1
-        minGroups: 1
-        spreadByField: cluster
   propagationMode: BidirectionalSync
