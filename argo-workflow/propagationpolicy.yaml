@@ -8,31 +8,31 @@ spec:
     # Namespace (먼저 배포되어야 함)
     - apiVersion: v1
       kind: Namespace
-      name: argo-workflows
+      name: argo
 
     # Core Resources (Namespace 범위 리소스)
     - apiVersion: v1
       kind: ServiceAccount
       name: argo-workflows-sa
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: v1
       kind: ConfigMap
       name: workflow-controller-configmap
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: v1
       kind: Secret
       name: webhook-tls-secret
-      namespace: argo-workflows
+      namespace: argo
 
     # RBAC (Namespace 범위 Role 및 RoleBinding)
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role
       name: argo-workflows-role
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       name: argo-workflows-role-binding
-      namespace: argo-workflows
+      namespace: argo
 
     # Deployments (Argo Workflows 컨트롤러 및 Webhook)
     - apiVersion: apps/v1
@@ -52,15 +52,15 @@ spec:
     - apiVersion: v1
       kind: Service
       name: argo-server
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: v1
       kind: Service
       name: workflow-controller-metrics
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: v1
       kind: Service
       name: workflow-webhook
-      namespace: argo-workflows
+      namespace: argo
 
     # Workflow Resources
     - apiVersion: argoproj.io/v1alpha1
@@ -69,11 +69,11 @@ spec:
     - apiVersion: argoproj.io/v1alpha1
       kind: CronWorkflow
       name: example-cronworkflow
-      namespace: argo-workflows
+      namespace: argo
     - apiVersion: argoproj.io/v1alpha1
       kind: WorkflowEventBinding
       name: example-workflow-event-binding
-      namespace: argo-workflows
+      namespace: argo
 
   placement:
     clusterAffinity:
