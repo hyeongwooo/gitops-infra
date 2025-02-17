@@ -1,0 +1,86 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: argo-workflows-resources
+  namespace: argo-workflows
+spec:
+  resourceSelectors:
+    # Namespace (먼저 배포되어야 함)
+    - apiVersion: v1
+      kind: Namespace
+      name: argo-workflows
+
+    # Core Resources (Namespace 범위 리소스)
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: argo-workflows-sa
+      namespace: argo-workflows
+    - apiVersion: v1
+      kind: ConfigMap
+      name: workflow-controller-configmap
+      namespace: argo-workflows
+    - apiVersion: v1
+      kind: Secret
+      name: webhook-tls-secret
+      namespace: argo-workflows
+
+    # RBAC (Namespace 범위 Role 및 RoleBinding)
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: argo-workflows-role
+      namespace: argo-workflows
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: argo-workflows-role-binding
+      namespace: argo-workflows
+
+    # Deployments (Argo Workflows 컨트롤러 및 Webhook)
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: workflow-controller
+      namespace: argo-workflows
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: argo-server
+      namespace: argo-workflows
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: workflow-webhook
+      namespace: argo-workflows
+
+    # Services (웹 UI 및 컨트롤러 서비스)
+    - apiVersion: v1
+      kind: Service
+      name: argo-server
+      namespace: argo-workflows
+    - apiVersion: v1
+      kind: Service
+      name: workflow-controller-metrics
+      namespace: argo-workflows
+    - apiVersion: v1
+      kind: Service
+      name: workflow-webhook
+      namespace: argo-workflows
+
+    # Workflow Resources
+    - apiVersion: argoproj.io/v1alpha1
+      kind: ClusterWorkflowTemplate
+      name: example-cluster-template
+    - apiVersion: argoproj.io/v1alpha1
+      kind: CronWorkflow
+      name: example-cronworkflow
+      namespace: argo-workflows
+    - apiVersion: argoproj.io/v1alpha1
+      kind: WorkflowEventBinding
+      name: example-workflow-event-binding
+      namespace: argo-workflows
+
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+    spreadConstraints:
+      - maxGroups: 1
+        minGroups: 1
+        spreadByField: cluster
+  propagationMode: BidirectionalSync
