@@ -13,6 +13,45 @@ spec:
     - apiVersion: apiextensions.k8s.io/v1
       kind: CustomResourceDefinition
       name: sensors.argoproj.io
+    apiVersion: policy.karmada.io/v1alpha1
+kind: ClusterPropagationPolicy
+metadata:
+  name: argoevents-cluster-resources
+spec:
+  resourceSelectors:
+    # ClusterRole 및 ClusterRoleBinding 배포
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-webhook
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-aggregate-to-admin
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-aggregate-to-edit
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-aggregate-to-view
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-events-binding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-events-webhook-binding
+    # kube-system access 관련 Role 및 Binding 추가
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: kube-system-configmap-reader
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: kube-system-configmap-reader-binding
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
   placement:
     clusterAffinity:
       clusterNames:
