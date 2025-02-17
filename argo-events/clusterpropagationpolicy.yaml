@@ -50,11 +50,6 @@ spec:
     clusterAffinity:
       clusterNames:
         - member1
-    
-  placement:
-    clusterAffinity:
-      clusterNames:
-        - member1
     spreadConstraints:
       - maxGroups: 1
         minGroups: 1
