@@ -14,10 +14,6 @@ spec:
       kind: ServiceAccount
       name: argo-server
       namespace: argo
-    - apiVersion: v1
-      kind: ServiceAccount
-      name: github.com
-      namespace: argo
     
     # ConfigMaps
     - apiVersion: v1
@@ -67,38 +63,11 @@ spec:
       name: argo-binding
       namespace: argo
 
-    # Priority Class
-    - apiVersion: scheduling.k8s.io/v1
-      kind: PriorityClass
-      name: workflow-controller
-
     # Deployments
     - apiVersion: apps/v1
       kind: Deployment
       name: workflow-controller
       namespace: argo
-      labelSelector:
-        matchLabels: 
-          app: workflow-controller
-    # 추가: default.service-account-token Secret
-    - apiVersion: v1
-      kind: Secret
-      name: default.service-account-token
-      namespace: argo
-
-    # 추가: github.com.service-account-token Secret
-    - apiVersion: v1
-      kind: Secret
-      name: github.com.service-account-token
-      namespace: argo
-
-    # Workflow Controller를 위한 추가 RBAC
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      name: argo-clusterworkflowtemplate-role
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      name: argo-clusterworkflowtemplate-role-binding
     - apiVersion: apps/v1
       kind: Deployment
       name: argo-server
@@ -111,6 +80,7 @@ spec:
       kind: Deployment
       name: httpbin
       namespace: argo
+
   placement:
     clusterAffinity:
       clusterNames:
