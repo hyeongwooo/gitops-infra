@@ -2,7 +2,7 @@ apiVersion: policy.karmada.io/v1alpha1
 kind: PropagationPolicy
 metadata:
   name: argo-workflows-resources
-  namespace: argo-workflows
+  namespace: argo
 spec:
   resourceSelectors:
     # Namespace (먼저 배포되어야 함)
