@@ -5,10 +5,12 @@ metadata:
   namespace: knative-serving
 spec:
   resourceSelectors:
-    # Knative Serving Core Components
+    # Knative Serving Namespace
     - apiVersion: v1
       kind: Namespace
       name: knative-serving
+
+    # Knative Serving ServiceAccounts
     - apiVersion: v1
       kind: ServiceAccount
       name: controller
@@ -18,12 +20,26 @@ spec:
       name: autoscaler
       namespace: knative-serving
     - apiVersion: v1
+      kind: ServiceAccount
+      name: webhook
+      namespace: knative-serving
+
+    # ConfigMaps (추가된 설정들)
+    - apiVersion: v1
       kind: ConfigMap
       name: config-autoscaler
       namespace: knative-serving
     - apiVersion: v1
       kind: ConfigMap
       name: config-network
+      namespace: knative-serving
+    - apiVersion: v1
+      kind: ConfigMap
+      name: config-logging
+      namespace: knative-serving
+    - apiVersion: v1
+      kind: ConfigMap
+      name: config-deployment
       namespace: knative-serving
 
     # Knative Serving Deployments
@@ -53,6 +69,14 @@ spec:
       kind: Service
       name: webhook
       namespace: knative-serving
+    - apiVersion: v1
+      kind: Service
+      name: knative-local-gateway
+      namespace: knative-serving
+    - apiVersion: v1
+      kind: Service
+      name: knative-ingress-gateway
+      namespace: istio-system
 
   placement:
     clusterAffinity:
