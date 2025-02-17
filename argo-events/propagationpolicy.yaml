@@ -12,34 +12,75 @@ spec:
     # Core Resources
     - apiVersion: v1
       kind: ServiceAccount
+      name: argo-events-sa
+      namespace: argo-events
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: argo-events-webhook-sa
       namespace: argo-events
     - apiVersion: v1
       kind: Secret
       namespace: argo-events
     - apiVersion: v1
       kind: Service
+      name: events-webhook
+      namespace: argo-events
+    - apiVersion: v1
+      kind: ConfigMap
+      name: argo-events-controller-config
       namespace: argo-events
     # RBAC Resources
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       name: argo-events-role
     - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-webhook
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-aggregate-to-admin
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-aggregate-to-edit
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-aggregate-to-view
+    - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       name: argo-events-binding
     - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-events-webhook-binding
+    - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role
+      name: argo-events-role
       namespace: argo-events
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
+      name: argo-events-role-binding
       namespace: argo-events
     # Deployments
     - apiVersion: apps/v1
       kind: Deployment
+      name: controller-manager
       namespace: argo-events
-    # Webhook
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: events-webhook
+      namespace: argo-events
+    # Webhook Config
     - apiVersion: admissionregistration.k8s.io/v1
       kind: ValidatingWebhookConfiguration
       name: validating-webhook-configuration
+    # EventBus
+    - apiVersion: argoproj.io/v1alpha1
+      kind: EventBus
+      name: default
+      namespace: argo-events
+    # kube-system access
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: kube-system-configmap-reader
   placement:
     clusterAffinity:
       clusterNames:
