@@ -31,12 +31,17 @@ spec:
       namespace: argocd
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
+      name: argocd-server
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
+      name: argocd-server
     # Deployments
     - apiVersion: apps/v1
       kind: Deployment
       namespace: argocd
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/part-of: argocd
     - apiVersion: apps/v1
       kind: StatefulSet
       namespace: argocd
