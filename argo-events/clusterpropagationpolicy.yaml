@@ -14,11 +14,6 @@ spec:
       kind: CustomResourceDefinition
       name: sensors.argoproj.io
     apiVersion: policy.karmada.io/v1alpha1
-kind: ClusterPropagationPolicy
-metadata:
-  name: argoevents-cluster-resources
-spec:
-  resourceSelectors:
     # ClusterRole 및 ClusterRoleBinding 배포
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
@@ -48,10 +43,6 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       name: kube-system-configmap-reader-binding
-  placement:
-    clusterAffinity:
-      clusterNames:
-        - member1
   placement:
     clusterAffinity:
       clusterNames:
