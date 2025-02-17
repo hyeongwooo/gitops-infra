@@ -1,0 +1,51 @@
+apiVersion: policy.karmada.io/v1alpha1
+kind: PropagationPolicy
+metadata:
+  name: argoevents-resources-policy
+  namespace: argo-events
+spec:
+  resourceSelectors:
+    # Namespace
+    - apiVersion: v1
+      kind: Namespace
+      name: argo-events
+    # Core Resources
+    - apiVersion: v1
+      kind: ServiceAccount
+      namespace: argo-events
+    - apiVersion: v1
+      kind: Secret
+      namespace: argo-events
+    - apiVersion: v1
+      kind: Service
+      namespace: argo-events
+    # RBAC Resources
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: argo-events-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: argo-events-binding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      namespace: argo-events
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      namespace: argo-events
+    # Deployments
+    - apiVersion: apps/v1
+      kind: Deployment
+      namespace: argo-events
+    # Webhook
+    - apiVersion: admissionregistration.k8s.io/v1
+      kind: ValidatingWebhookConfiguration
+      name: validating-webhook-configuration
+  placement:
+    clusterAffinity:
+      clusterNames:
+        - member1
+    spreadConstraints:
+      - maxGroups: 1
+        minGroups: 1
+        spreadByField: cluster
+  propagationMode: BidirectionalSync
