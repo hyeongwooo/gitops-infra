@@ -4,15 +4,18 @@ metadata:
   name: argoevents-crds-policy
 spec:
   resourceSelectors:
+     # EventBus CRD 추가
     - apiVersion: apiextensions.k8s.io/v1
-      kind: CustomResourceDefinition  
+      kind: CustomResourceDefinition
       name: eventbus.argoproj.io
     - apiVersion: apiextensions.k8s.io/v1
       kind: CustomResourceDefinition
-      name: eventsources.argoproj.io 
+      name: eventsources.argoproj.io
     - apiVersion: apiextensions.k8s.io/v1
       kind: CustomResourceDefinition
       name: sensors.argoproj.io
+
+    # ClusterScope RBAC 리소스 추가
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       name: argo-events-role
@@ -34,7 +37,7 @@ spec:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       name: argo-events-webhook-binding
-
+      
     # kube-system access 관련 Role 및 Binding 추가
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
